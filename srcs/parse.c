@@ -6,7 +6,7 @@
 /*   By: jbuan <jbuan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:43:00 by juan              #+#    #+#             */
-/*   Updated: 2021/12/01 18:20:06 by jbuan            ###   ########.fr       */
+/*   Updated: 2021/12/14 14:35:51 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,7 @@ void	catch_int(char **av, t_philo *philo)
 	if (philo->number_of_philosophers <= 0 || philo->time_to_die <= 0
 			|| philo->time_to_eat <= 0 || philo->time_to_sleep <= 0)
 		error_san(ERRNO1, ERRMSG1);
+	else if (philo->time_to_die >= 1000 || philo->time_to_eat >= 1000
+			|| philo->time_to_sleep >= 1000)
+		error_san(ERRNO3, ERRMSG3);
 }
