@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:36:43 by juan              #+#    #+#             */
-/*   Updated: 2021/12/22 02:26:54 by juan             ###   ########.fr       */
+/*   Updated: 2022/01/18 17:29:12 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,25 +30,30 @@ t_philo	*init_struct(void)
 	philo->time_to_think = 0;
 	philo->time_to_die = 0;
 	philo->number_of_times_each_philosopher_must_eat = 0;
-	philo->famished = 1;
 	philo->time = 0;
+	philo->dead = 0;
+	philo->eat_count = 0;
 	return (philo);
 }
 
 void	init_thread(t_philo *philo)
 {
 	int	i;
+	int	errorp;
 
 	i = 1;
+	errorp = 0;
 	philo->thread = malloc(sizeof(t_thread) * philo->number_of_philosophers);
 	while (i <= philo->number_of_philosophers)
 	{
 		if (!philo->thread)
-			error_san(ERRNO4, ERRMSG4);
+			error_san(ERRNO4, ERRMSG4, errorp);
 		philo->thread[i].miamed = 0;
 		philo->thread[i].alive = 1;
 		philo->thread[i].number = i;
-		philo->thread[i].local_time = 0; 
+		philo->thread[i].local_time = 0;
+		philo->thread[i].famished = 1;
+		philo->thread[i].sleepy = 1;
 		pthread_mutex_init(&philo->thread[i].fork, NULL);
 		if (i == philo->number_of_philosophers)
 			philo->thread[i].next_fork = &philo->thread[1].fork;
@@ -61,26 +66,24 @@ void	init_thread(t_philo *philo)
 
 int	main(int ac, char *av[])
 {
-	t_philo	*philo;
-	int		i;
+	int			i;
+	int			errorp;
+	t_philo		*philo;
 
+	errorp = 0;
 	i = 1;
 	philo = init_struct();
 	if (ac == 5 || ac == 6)
 	{
-		catch_int(av, philo);
-		init_thread(philo);
-		main_shit(philo);
-		while (sky_time(&philo->thread[i]) == 0 && philo->thread->alive == 1)
+		if (catch_int(av, philo) == 0)
 		{
-			i++;
-			if (i >= philo->number_of_philosophers)
-				i = 1;
+			init_thread(philo);
+			main_shit(philo);
+			nihility(philo);
 		}
-		nihility(philo);
 		return (0);
 	}
-	else 
-		error_san(ERRNO0, ERRMSG0);
+	else
+		error_san(ERRNO0, ERRMSG0, errorp);
 	return (0);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/18 17:54:59 by juan              #+#    #+#             */
+/*   Updated: 2022/01/18 18:30:25 by juan             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <pthread.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -8,61 +20,84 @@
 
 void	miam_time(t_thread *thread)
 {
-	pthread_mutex_lock(&thread->access->napkin);
-	thread->miamed = thread->local_time;
-	if (thread->number % 2 == 0)
+	if (thread->access->dead == 0)
 	{
-		thread->local_time += thread->access->time_to_eat;
+		thread->miamed = thread->local_time;
+		thread->access->eat_count++;
+		pthread_mutex_lock(&thread->fork);
+		pthread_mutex_lock(thread->next_fork);
+		printf("%ld ms	philo %d took a fork\n", thread->local_time
+			- thread->access->time, thread->number);
+		printf("%ld ms	philo %d took a fork\n", thread->local_time
+			- thread->access->time, thread->number);
+		printf("%ld ms	philo %d is eating\n", thread->local_time
+			- thread->access->time, thread->number);
+		thread->famished = 1;
 		usleep(thread->access->time_to_eat * 1000);
+		thread->local_time = get_time();
+		thread->famished = 0;
+		pthread_mutex_unlock(&thread->fork);
+		pthread_mutex_unlock(thread->next_fork);
 	}
-	if (sky_time(thread) == 1)
-		return;
-	pthread_mutex_lock(&thread->fork);
-	pthread_mutex_lock(thread->next_fork);
-	printf("%ld ms	philo %d took a fork\n", thread->local_time - thread->access->time, thread->number);
-	printf("%ld ms	philo %d took a fork\n", thread->local_time - thread->access->time, thread->number);
-	printf("%ld ms	philo %d is eating\n", thread->local_time - thread->access->time, thread->number);
-	thread->local_time += thread->access->time_to_eat;
-	thread->miamed = thread->local_time;
-	pthread_mutex_unlock(&thread->access->napkin);
-	usleep(thread->access->time_to_eat * 1000);
 }
 
 void	sleep_time(t_thread *thread)
 {
-	pthread_mutex_lock(&thread->access->print);
-	pthread_mutex_lock(&thread->access->napkin);
-	printf("%ld ms	philo %d sleeps soundly\n", thread->local_time - thread->access->time, thread->number);
-	thread->local_time += thread->access->time_to_sleep;
-	if (sky_time(thread) == 1)
-			return ;
-	pthread_mutex_unlock(&thread->access->print);
-	pthread_mutex_unlock(&thread->access->napkin);
-	usleep(thread->access->time_to_sleep * 1000);	
+	if (thread->access->dead == 0)
+	{
+		thread->sleepy = 1;
+		printf("%ld ms	philo %d sleeps soundly\n", \
+			thread->local_time - thread->access->time,
+			thread->number);
+		usleep(thread->access->time_to_sleep * 1000);
+		thread->local_time = get_time();
+		thread->sleepy = 0;
+	}
 }
 
-int	sky_time(t_thread *thread)
+void	think_time(t_thread *thread)
 {
-// est censé me permettre de reperer quand un philo est mort due a un trop long temps san manger
-	if (thread->local_time - thread->miamed >= thread->access->time_to_die && thread->alive == 1)
+	if (thread->access->dead == 0)
 	{
-		pthread_mutex_lock(&thread->access->napkin);
-		pthread_mutex_lock(&thread->access->print);
-		thread->alive = 0;
-		printf("%ld ms philo %d is dead ..\n", thread->local_time - thread->access->time, thread->number);
-		pthread_mutex_unlock(&thread->access->napkin);
-		pthread_mutex_unlock(&thread->access->print);
-		return (1);
+		printf("%ld ms	philo %d thinks deeply\n",
+			thread->local_time - thread->access->time,
+			thread->number);
 	}
-	if (thread->alive == 0)
-		return (1);
-	return (0);
+}
+
+void	sky_time(t_philo *philo)
+{
+	int	i;
+
+	if (philo->number_of_philosophers == 1)
+		death(philo, 1);
+	while (philo->number_of_philosophers > 1)
+	{
+		i = 1;
+		while (i++ <= philo->number_of_philosophers)
+		{
+			if (philo->thread[i].famished)
+				continue ;
+			pthread_mutex_lock(&philo->print);
+			if (philo->thread[i].local_time - \
+			philo->thread[i].miamed >= philo->time_to_die)
+			{
+				death(philo, i);
+				return ;
+			}
+			pthread_mutex_unlock(&philo->print);
+		}
+		if (check_nb_of_miam(philo))
+			break ;
+	}
+	philo->dead = 1;
 }
 
 void	nihility(t_philo *philo)
 {
 	int	i;
 
+	usleep(10);
 	i = 1;
 	pthread_mutex_unlock(&philo->print);
 	pthread_mutex_destroy(&philo->print);
@@ -75,7 +110,6 @@ void	nihility(t_philo *philo)
 		pthread_mutex_unlock(philo->thread[i].next_fork);
 		pthread_mutex_destroy(philo->thread[i].next_fork);
 		pthread_join(philo->thread[i].thread, NULL);
-		//free(philo->thread + i);
 		i++;
 	}
 	free(philo);

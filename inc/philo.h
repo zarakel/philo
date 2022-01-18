@@ -1,19 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/18 18:47:40 by juan              #+#    #+#             */
+/*   Updated: 2022/01/18 18:48:39 by juan             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 # include "struct.h"
 
 int		main(int ac, char **av);
 t_philo	*init_struct(void);
-void	error_san(int error, char *error_msg);
-void	catch_int(char **av, t_philo *philo);
+void	error_san(int error, char *error_msg, int errorp);
+int		catch_int(char **av, t_philo *philo);
+int		dispatch(char **av, t_philo *philo, int error);
 void	main_shit(t_philo *philo);
 void	init_thread(t_philo *philo);
-long	get_time();
-void	*menu();
+long	get_time(void);
+void	*menu(void);
 void	miam_time(t_thread *thread);
 void	sleep_time(t_thread *thread);
-int	sky_time(t_thread *thread);
+void	think_time(t_thread *thread);
+int		check_nb_of_miam(t_philo *philo);
+void	sky_time(t_philo *philo);
 void	nihility(t_philo *philo);
-
+void	death(t_philo *philo, int i);
 
 #endif
