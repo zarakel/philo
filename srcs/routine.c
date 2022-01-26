@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 17:54:59 by juan              #+#    #+#             */
-/*   Updated: 2022/01/18 18:30:25 by juan             ###   ########.fr       */
+/*   Updated: 2022/01/26 14:43:03 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	sky_time(t_philo *philo)
 		death(philo, 1);
 	while (philo->number_of_philosophers > 1)
 	{
-		i = 1;
-		while (i++ <= philo->number_of_philosophers)
+		i = 0;
+		while (++i <= philo->number_of_philosophers)
 		{
 			if (philo->thread[i].famished)
 				continue ;

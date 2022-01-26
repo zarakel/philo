@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:17:20 by juan              #+#    #+#             */
-/*   Updated: 2022/01/18 18:29:17 by juan             ###   ########.fr       */
+/*   Updated: 2022/01/26 14:42:05 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ void	main_shit(t_philo *philo)
 	philo->thread->local_time = philo->time;
 	pthread_mutex_init(&philo->print, NULL);
 	pthread_mutex_init(&philo->napkin, NULL);
-	i = 1;
-	while (i++ <= philo->number_of_philosophers)
+	i = 0;
+	while (++i <= philo->number_of_philosophers)
 	{
 		if (pthread_create(&philo->thread[i].thread, NULL,
 				menu, &philo->thread[i]) != 0)

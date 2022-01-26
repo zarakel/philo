@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:47:40 by juan              #+#    #+#             */
-/*   Updated: 2022/01/18 18:48:39 by juan             ###   ########.fr       */
+/*   Updated: 2022/01/26 14:37:16 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int		dispatch(char **av, t_philo *philo, int error);
 void	main_shit(t_philo *philo);
 void	init_thread(t_philo *philo);
 long	get_time(void);
-void	*menu(void);
+void	*menu(void *arg);
 void	miam_time(t_thread *thread);
 void	sleep_time(t_thread *thread);
 void	think_time(t_thread *thread);
