@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:17:20 by juan              #+#    #+#             */
-/*   Updated: 2022/01/26 14:42:05 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/03 16:49:31 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,12 @@ void	main_shit(t_philo *philo)
 	int	i;
 	int	errorp;
 
-	i = 1;
+	//philo impair genre 1 et 3 si il n'y en a que 3 ne peuvent pas bouffer ensemble puisque ils ne peuvent pas partager leur fourchettes en commun
+	i = 0;
 	errorp = 0;
 	philo->time = get_time();
-	while (i <= philo->number_of_philosophers)
-	{
+	while (++i <= philo->number_of_philosophers)
 		philo->thread[i].local_time = philo->time;
-		i++;
-	}
 	philo->thread->local_time = philo->time;
 	pthread_mutex_init(&philo->print, NULL);
 	pthread_mutex_init(&philo->napkin, NULL);
