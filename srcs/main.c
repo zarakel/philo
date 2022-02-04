@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:36:43 by juan              #+#    #+#             */
-/*   Updated: 2022/01/18 17:29:12 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/04 14:52:41 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,26 +41,30 @@ void	init_thread(t_philo *philo)
 	int	i;
 	int	errorp;
 
-	i = 1;
+	i = 0;
 	errorp = 0;
 	philo->thread = malloc(sizeof(t_thread) * philo->number_of_philosophers);
-	while (i <= philo->number_of_philosophers)
+	while (++i <= philo->number_of_philosophers)
 	{
 		if (!philo->thread)
 			error_san(ERRNO4, ERRMSG4, errorp);
 		philo->thread[i].miamed = 0;
+		philo->thread[i].dam= 0;
 		philo->thread[i].alive = 1;
 		philo->thread[i].number = i;
 		philo->thread[i].local_time = 0;
 		philo->thread[i].famished = 1;
 		philo->thread[i].sleepy = 1;
 		pthread_mutex_init(&philo->thread[i].fork, NULL);
-		if (i == philo->number_of_philosophers)
-			philo->thread[i].next_fork = &philo->thread[1].fork;
-		else
-			philo->thread[i].next_fork = &philo->thread[i + 1].fork;
 		philo->thread[i].access = philo;
-		i++;
+	}
+	i = 0;
+	while (++i <= philo->number_of_philosophers)
+	{
+		if (i == philo->number_of_philosophers)
+			philo->thread[i].next_fork = philo->thread[1].fork;
+		else
+			philo->thread[i].next_fork = philo->thread[i + 1].fork;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:47:40 by juan              #+#    #+#             */
-/*   Updated: 2022/01/26 14:37:16 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/04 14:59:44 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	miam_time(t_thread *thread);
 void	sleep_time(t_thread *thread);
 void	think_time(t_thread *thread);
 int		check_nb_of_miam(t_philo *philo);
+void	print_miam_timestamps(t_thread *thread);
+void	dam_use(t_thread *thread);
 void	sky_time(t_philo *philo);
 void	nihility(t_philo *philo);
 void	death(t_philo *philo, int i);

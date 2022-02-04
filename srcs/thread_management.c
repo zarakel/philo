@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:17:20 by juan              #+#    #+#             */
-/*   Updated: 2022/02/03 16:49:31 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/04 16:53:10 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	*menu(void *arg)
 	thread = (t_thread *)arg;
 	if (thread->access->number_of_philosophers == 1)
 	{
-		thread->miamed = get_time();
 		printf("%ld ms	philo %d have no enough fork\n", get_time()
 			- thread->access->time, thread->number);
 		usleep(thread->access->time_to_die * 1000);
@@ -44,8 +43,14 @@ void	*menu(void *arg)
 	}
 	if (thread->number % 2 == 0)
 	{
-		thread->local_time += thread->access->time_to_eat;
 		usleep(thread->access->time_to_eat * 1000);
+		get_time();
+	}
+	if (thread->number == thread->access->number_of_philosophers
+			&& thread->access->number_of_philosophers % 2 == 1)
+	{
+		usleep(10000);
+		get_time();
 	}
 	while (thread->access->dead == 0)
 	{
@@ -54,6 +59,23 @@ void	*menu(void *arg)
 		think_time(thread);
 	}
 	return (0);
+}
+
+void print_miam_timestamps(t_thread *thread)
+{
+		pthread_mutex_lock(&thread->fork);
+        pthread_mutex_lock(&thread->next_fork);
+        pthread_mutex_lock(&thread->access->print);
+        printf("%ld ms  philo %d took a fork\n", get_time() - thread->access->time,
+				thread->number);
+        printf("%ld ms  philo %d took a fork\n", get_time() - thread->access->time,
+				thread->number);
+	    printf("%ld ms  philo %d is eating\n", get_time() - thread->access->time,
+				thread->number);
+        get_time();
+        pthread_mutex_unlock(&thread->fork);
+        pthread_mutex_unlock(&thread->next_fork);
+        pthread_mutex_unlock(&thread->access->print);	
 }
 
 int	check_nb_of_miam(t_philo *philo)
@@ -74,7 +96,6 @@ void	main_shit(t_philo *philo)
 	int	i;
 	int	errorp;
 
-	//philo impair genre 1 et 3 si il n'y en a que 3 ne peuvent pas bouffer ensemble puisque ils ne peuvent pas partager leur fourchettes en commun
 	i = 0;
 	errorp = 0;
 	philo->time = get_time();

@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:50:26 by juan              #+#    #+#             */
-/*   Updated: 2022/01/18 18:47:15 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/04 14:43:38 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ struct	s_philo
 struct		s_thread
 {
 	pthread_mutex_t	fork;
-	pthread_mutex_t	*next_fork;
+	pthread_mutex_t	next_fork;
 	pthread_t		thread;
 	long			miamed;
 	long			local_time;
@@ -46,6 +46,7 @@ struct		s_thread
 	int				number;
 	int				famished;
 	int				sleepy;
+	int				dam;
 	t_philo			*access;
 };
 
