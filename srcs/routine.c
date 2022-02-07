@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 17:54:59 by juan              #+#    #+#             */
-/*   Updated: 2022/02/07 11:46:53 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/07 15:48:33 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	miam_time(t_thread *thread)
 		print_miam_timestamps(thread);
 		get_time();
 		thread->famished = 1;
-		ft_usleep(thread->access->time_to_eat, thread);
+		ft_usleep(thread->access->time_to_eat);
 		thread->famished = 0;
 	}
 }
@@ -44,7 +44,7 @@ void	sleep_time(t_thread *thread)
 		pthread_mutex_unlock(&thread->access->print);
 		get_time();
 		thread->sleepy = 1;
-		ft_usleep(thread->access->time_to_sleep, thread);
+		ft_usleep(thread->access->time_to_sleep);
 		thread->sleepy = 0;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:17:20 by juan              #+#    #+#             */
-/*   Updated: 2022/02/07 11:56:20 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/07 15:48:39 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,13 @@ void	*menu(void *arg)
 		return (0);
 	}
 	if (thread->number % 2 == 0)
-		ft_usleep(thread->access->time_to_eat, thread);
+		ft_usleep(thread->access->time_to_eat);
 	if (thread->number == thread->access->number_of_philosophers
 		&& thread->access->number_of_philosophers % 2 == 1)
-		ft_usleep(3, thread);
+		{
+			usleep(100000);
+			get_time();
+		}
 	while (thread->access->dead == 0)
 	{
 		miam_time(thread);
