@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 17:54:59 by juan              #+#    #+#             */
-/*   Updated: 2022/02/04 17:01:22 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/07 11:46:53 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,13 @@ void	miam_time(t_thread *thread)
 {
 	if (thread->access->dead == 0)
 	{
-	//	if (!thread->dam)
-	//	{
-			thread->miamed = get_time();
-			thread->access->eat_count++;
-			print_miam_timestamps(thread);
-	//	}
+		thread->miamed = get_time();
+		thread->access->eat_count++;
+		get_time();
+		print_miam_timestamps(thread);
 		get_time();
 		thread->famished = 1;
-		usleep(thread->access->time_to_eat * 1000);
-		get_time(); // avant, thread->local_time = get_time();
+		ft_usleep(thread->access->time_to_eat, thread);
 		thread->famished = 0;
 	}
 }
@@ -40,25 +37,21 @@ void	sleep_time(t_thread *thread)
 {
 	if (thread->access->dead == 0)
 	{
-	//	if (!thread->dam)
-	//	{
-			pthread_mutex_lock(&thread->access->print);
-			printf("%ld ms	philo %d sleeps soundly\n", \
-				get_time() - thread->access->time,
-				thread->number);
-			pthread_mutex_unlock(&thread->access->print);
-	//	}
+		pthread_mutex_lock(&thread->access->print);
+		printf("%ld ms	philo %d sleeps soundly\n", \
+			get_time() - thread->access->time,
+			thread->number);
+		pthread_mutex_unlock(&thread->access->print);
 		get_time();
 		thread->sleepy = 1;
-		usleep(thread->access->time_to_sleep * 1000);
-		get_time();
+		ft_usleep(thread->access->time_to_sleep, thread);
 		thread->sleepy = 0;
 	}
 }
 
 void	think_time(t_thread *thread)
 {
-	if (thread->access->dead == 0) //&& !thread->dam)
+	if (thread->access->dead == 0)
 	{
 		get_time();
 		pthread_mutex_lock(&thread->access->print);
@@ -67,7 +60,6 @@ void	think_time(t_thread *thread)
 			thread->number);
 		pthread_mutex_unlock(&thread->access->print);
 	}
-//	dam_use(thread);
 }
 
 void	sky_time(t_philo *philo)

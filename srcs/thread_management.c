@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:17:20 by juan              #+#    #+#             */
-/*   Updated: 2022/02/04 16:53:10 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/07 11:56:20 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ long	get_time(void)
 	long			milliseconds;
 
 	gettimeofday(&tp, NULL);
-	milliseconds = tp.tv_sec * 1000;
-	milliseconds += tp.tv_usec / 1000;
+	milliseconds = (tp.tv_sec * 1000) + (tp.tv_usec / 1000);
 	return (milliseconds);
 }
 
@@ -42,16 +41,10 @@ void	*menu(void *arg)
 		return (0);
 	}
 	if (thread->number % 2 == 0)
-	{
-		usleep(thread->access->time_to_eat * 1000);
-		get_time();
-	}
+		ft_usleep(thread->access->time_to_eat, thread);
 	if (thread->number == thread->access->number_of_philosophers
-			&& thread->access->number_of_philosophers % 2 == 1)
-	{
-		usleep(10000);
-		get_time();
-	}
+		&& thread->access->number_of_philosophers % 2 == 1)
+		ft_usleep(3, thread);
 	while (thread->access->dead == 0)
 	{
 		miam_time(thread);
@@ -61,21 +54,20 @@ void	*menu(void *arg)
 	return (0);
 }
 
-void print_miam_timestamps(t_thread *thread)
+void	print_miam_timestamps(t_thread *thread)
 {
-		pthread_mutex_lock(&thread->fork);
-        pthread_mutex_lock(&thread->next_fork);
-        pthread_mutex_lock(&thread->access->print);
-        printf("%ld ms  philo %d took a fork\n", get_time() - thread->access->time,
-				thread->number);
-        printf("%ld ms  philo %d took a fork\n", get_time() - thread->access->time,
-				thread->number);
-	    printf("%ld ms  philo %d is eating\n", get_time() - thread->access->time,
-				thread->number);
-        get_time();
-        pthread_mutex_unlock(&thread->fork);
-        pthread_mutex_unlock(&thread->next_fork);
-        pthread_mutex_unlock(&thread->access->print);	
+	pthread_mutex_lock(&thread->fork);
+	pthread_mutex_lock(&thread->next_fork);
+	pthread_mutex_lock(&thread->access->print);
+	printf("%ld ms  philo %d took a fork\n",
+		get_time() - thread->access->time, thread->number);
+	printf("%ld ms  philo %d took a fork\n",
+		get_time() - thread->access->time, thread->number);
+	printf("%ld ms  philo %d is eating\n",
+		get_time() - thread->access->time, thread->number);
+	pthread_mutex_unlock(&thread->fork);
+	pthread_mutex_unlock(&thread->next_fork);
+	pthread_mutex_unlock(&thread->access->print);
 }
 
 int	check_nb_of_miam(t_philo *philo)
@@ -101,7 +93,6 @@ void	main_shit(t_philo *philo)
 	philo->time = get_time();
 	while (++i <= philo->number_of_philosophers)
 		philo->thread[i].local_time = philo->time;
-	philo->thread->local_time = philo->time;
 	pthread_mutex_init(&philo->print, NULL);
 	pthread_mutex_init(&philo->napkin, NULL);
 	i = 0;
