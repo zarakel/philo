@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:17:20 by juan              #+#    #+#             */
-/*   Updated: 2022/02/07 15:48:39 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/08 18:53:19 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ void	*menu(void *arg)
 
 void	print_miam_timestamps(t_thread *thread)
 {
-	pthread_mutex_lock(&thread->fork);
-	pthread_mutex_lock(&thread->next_fork);
 	pthread_mutex_lock(&thread->access->print);
 	printf("%ld ms  philo %d took a fork\n",
 		get_time() - thread->access->time, thread->number);
@@ -68,8 +66,6 @@ void	print_miam_timestamps(t_thread *thread)
 		get_time() - thread->access->time, thread->number);
 	printf("%ld ms  philo %d is eating\n",
 		get_time() - thread->access->time, thread->number);
-	pthread_mutex_unlock(&thread->fork);
-	pthread_mutex_unlock(&thread->next_fork);
 	pthread_mutex_unlock(&thread->access->print);
 }
 

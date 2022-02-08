@@ -6,7 +6,7 @@
 /*   By: jbuan <jbuan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:45:32 by juan              #+#    #+#             */
-/*   Updated: 2022/02/07 15:48:23 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/08 15:24:24 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,11 @@ void	death(t_philo *philo, int i)
 
 void	ft_usleep(long time)
 {
-/*	long	reference_time;
+	long	reference_time;
 
 	reference_time = get_time();
-	pthread_mutex_lock(&thread->access->napkin);
+//	pthread_mutex_lock(&thread->access->napkin);
 	while (get_time() - reference_time < time)
 		usleep(time);
-	pthread_mutex_unlock(&thread->access->napkin);
-*/
-	usleep(time * 1000);
-	get_time();
+//	pthread_mutex_unlock(&thread->access->napkin);
 }

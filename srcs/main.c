@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:36:43 by juan              #+#    #+#             */
-/*   Updated: 2022/02/07 11:43:16 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/08 17:17:27 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ void	init_thread(t_philo *philo)
 	i = 0;
 	while (++i <= philo->number_of_philosophers)
 	{
-		if (i == philo->number_of_philosophers)
-			philo->thread[i].next_fork = philo->thread[1].fork;
+		if (i == 1)
+			philo->thread[i].next_fork = 
+				philo->thread[philo->number_of_philosophers].fork;
 		else
-			philo->thread[i].next_fork = philo->thread[i + 1].fork;
+			philo->thread[i].next_fork = philo->thread[i - 1].fork;
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 17:54:59 by juan              #+#    #+#             */
-/*   Updated: 2022/02/07 15:48:33 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/08 17:26:47 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,20 @@ void	miam_time(t_thread *thread)
 {
 	if (thread->access->dead == 0)
 	{
+		pthread_mutex_lock(&thread->fork);
+		pthread_mutex_lock(&thread->next_fork);
+		ft_usleep(0);
 		thread->miamed = get_time();
 		thread->access->eat_count++;
-		get_time();
+		ft_usleep(0);
 		print_miam_timestamps(thread);
-		get_time();
+		ft_usleep(0);
 		thread->famished = 1;
 		ft_usleep(thread->access->time_to_eat);
 		thread->famished = 0;
+		ft_usleep(0);
+		pthread_mutex_unlock(&thread->fork);
+		pthread_mutex_unlock(&thread->next_fork);
 	}
 }
 
@@ -37,15 +43,17 @@ void	sleep_time(t_thread *thread)
 {
 	if (thread->access->dead == 0)
 	{
+		ft_usleep(0);
 		pthread_mutex_lock(&thread->access->print);
 		printf("%ld ms	philo %d sleeps soundly\n", \
 			get_time() - thread->access->time,
 			thread->number);
 		pthread_mutex_unlock(&thread->access->print);
-		get_time();
-		thread->sleepy = 1;
+		ft_usleep(0);
+		thread->famished = 1;
 		ft_usleep(thread->access->time_to_sleep);
-		thread->sleepy = 0;
+		thread->famished = 0;
+		ft_usleep(0);
 	}
 }
 
@@ -53,12 +61,13 @@ void	think_time(t_thread *thread)
 {
 	if (thread->access->dead == 0)
 	{
-		get_time();
+		ft_usleep(0);
 		pthread_mutex_lock(&thread->access->print);
 		printf("%ld ms	philo %d thinks deeply\n",
 			get_time() - thread->access->time,
 			thread->number);
 		pthread_mutex_unlock(&thread->access->print);
+		ft_usleep(0);
 	}
 }
 
@@ -75,18 +84,17 @@ void	sky_time(t_philo *philo)
 		{
 			if (philo->thread[i].famished)
 				continue ;
-			pthread_mutex_lock(&philo->print);
 			if (get_time() - philo->thread[i].miamed >= philo->time_to_die)
 			{
 				death(philo, i);
 				return ;
 			}
-			pthread_mutex_unlock(&philo->print);
 		}
 		if (check_nb_of_miam(philo))
 			break ;
 	}
 	philo->dead = 1;
+
 }
 
 void	nihility(t_philo *philo)
