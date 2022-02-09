@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 18:47:40 by juan              #+#    #+#             */
-/*   Updated: 2022/02/07 15:48:48 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/09 06:06:34 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,6 @@ void	ft_usleep(long time);
 void	sky_time(t_philo *philo);
 void	nihility(t_philo *philo);
 void	death(t_philo *philo, int i);
+void	init_fork(t_philo *philo);
 
 #endif

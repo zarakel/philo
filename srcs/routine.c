@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/18 17:54:59 by juan              #+#    #+#             */
-/*   Updated: 2022/02/08 17:26:47 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/09 07:59:12 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ void	miam_time(t_thread *thread)
 {
 	if (thread->access->dead == 0)
 	{
-		pthread_mutex_lock(&thread->fork);
-		pthread_mutex_lock(&thread->next_fork);
 		ft_usleep(0);
+		thread->local_time = get_time();
 		thread->miamed = get_time();
 		thread->access->eat_count++;
 		ft_usleep(0);
@@ -34,8 +33,6 @@ void	miam_time(t_thread *thread)
 		ft_usleep(thread->access->time_to_eat);
 		thread->famished = 0;
 		ft_usleep(0);
-		pthread_mutex_unlock(&thread->fork);
-		pthread_mutex_unlock(&thread->next_fork);
 	}
 }
 
@@ -76,11 +73,11 @@ void	sky_time(t_philo *philo)
 	int	i;
 
 	if (philo->number_of_philosophers == 1)
-		death(philo, 1);
+		death(philo, 0);
 	while (philo->number_of_philosophers > 1)
 	{
 		i = 0;
-		while (++i <= philo->number_of_philosophers)
+		while (i < philo->number_of_philosophers)
 		{
 			if (philo->thread[i].famished)
 				continue ;
@@ -92,6 +89,7 @@ void	sky_time(t_philo *philo)
 		}
 		if (check_nb_of_miam(philo))
 			break ;
+		i++;
 	}
 	philo->dead = 1;
 
@@ -106,13 +104,14 @@ void	nihility(t_philo *philo)
 	pthread_mutex_destroy(&philo->print);
 	pthread_mutex_unlock(&philo->napkin);
 	pthread_mutex_destroy(&philo->napkin);
-	while (++i <= philo->number_of_philosophers)
+	while (i < philo->number_of_philosophers)
 	{
-		pthread_mutex_unlock(&philo->thread[i].fork);
-		pthread_mutex_destroy(&philo->thread[i].fork);
-		pthread_mutex_unlock(&philo->thread[i].next_fork);
-		pthread_mutex_destroy(&philo->thread[i].next_fork);
+		pthread_mutex_unlock(&philo->fork[i]);
+		pthread_mutex_destroy(&philo->fork[i]);
+		pthread_mutex_unlock(&philo->next_fork[i]);
+		pthread_mutex_destroy(&philo->next_fork[i]);
 		pthread_join(philo->thread[i].thread, NULL);
+		i++;
 	}
 	free(philo);
 }

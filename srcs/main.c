@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:36:43 by juan              #+#    #+#             */
-/*   Updated: 2022/02/08 17:17:27 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/09 07:02:45 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_philo	*init_struct(void)
 	philo->time = 0;
 	philo->dead = 0;
 	philo->eat_count = 0;
+	init_fork(philo);
 	return (philo);
 }
 
@@ -44,28 +45,20 @@ void	init_thread(t_philo *philo)
 	i = 0;
 	errorp = 0;
 	philo->thread = malloc(sizeof(t_thread) * philo->number_of_philosophers);
-	while (++i <= philo->number_of_philosophers)
+	while (i < philo->number_of_philosophers)
 	{
 		if (!philo->thread)
 			error_san(ERRNO4, ERRMSG4, errorp);
 		philo->thread[i].miamed = 0;
 		philo->thread[i].alive = 1;
-		philo->thread[i].number = i;
+		philo->thread[i].number = i + 1;
 		philo->thread[i].local_time = 0;
 		philo->thread[i].famished = 1;
 		philo->thread[i].sleepy = 1;
-		pthread_mutex_init(&philo->thread[i].fork, NULL);
 		philo->thread[i].access = philo;
+		i++;
 	}
-	i = 0;
-	while (++i <= philo->number_of_philosophers)
-	{
-		if (i == 1)
-			philo->thread[i].next_fork = 
-				philo->thread[philo->number_of_philosophers].fork;
-		else
-			philo->thread[i].next_fork = philo->thread[i - 1].fork;
-	}
+
 }
 
 int	main(int ac, char *av[])

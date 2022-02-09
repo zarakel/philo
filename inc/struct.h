@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:50:26 by juan              #+#    #+#             */
-/*   Updated: 2022/02/07 11:42:47 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/09 05:56:10 by juan             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ struct	s_philo
 	int				eat_count;
 	pthread_mutex_t	print;
 	pthread_mutex_t	napkin;
+	pthread_mutex_t	*fork;
+	pthread_mutex_t	*next_fork;
 	t_thread		*thread;
 };
 
 struct		s_thread
 {
-	pthread_mutex_t	fork;
-	pthread_mutex_t	next_fork;
 	pthread_t		thread;
 	long			miamed;
 	long			local_time;
