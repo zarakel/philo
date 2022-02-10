@@ -6,7 +6,7 @@
 /*   By: jbuan <jbuan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:45:32 by juan              #+#    #+#             */
-/*   Updated: 2022/02/10 17:14:42 by jbuan            ###   ########.fr       */
+/*   Updated: 2022/02/10 17:21:02 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	death(t_philo *philo, int i)
 	philo->thread[i].local_time = get_time();
 	printf("%ld ms	philo %d is dead\n", get_time()
 		- philo->time, philo->thread[i].number);
-	pthread_mutex_unlock(&philo->print);
 }
 
 void	ft_usleep(long time)
