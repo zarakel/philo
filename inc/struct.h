@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:50:26 by juan              #+#    #+#             */
-/*   Updated: 2022/02/09 05:56:10 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/10 15:20:12 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ struct	s_philo
 	pthread_mutex_t	print;
 	pthread_mutex_t	napkin;
 	pthread_mutex_t	*fork;
-	pthread_mutex_t	*next_fork;
+	pthread_mutex_t	**next_fork;
 	t_thread		*thread;
 };
 

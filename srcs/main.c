@@ -6,7 +6,7 @@
 /*   By: juan <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:36:43 by juan              #+#    #+#             */
-/*   Updated: 2022/02/09 07:02:45 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/10 17:00:20 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ t_philo	*init_struct(void)
 	philo->time = 0;
 	philo->dead = 0;
 	philo->eat_count = 0;
-	init_fork(philo);
 	return (philo);
 }
 
@@ -52,13 +51,12 @@ void	init_thread(t_philo *philo)
 		philo->thread[i].miamed = 0;
 		philo->thread[i].alive = 1;
 		philo->thread[i].number = i + 1;
-		philo->thread[i].local_time = 0;
+		philo->thread[i].local_time = get_time();
 		philo->thread[i].famished = 1;
 		philo->thread[i].sleepy = 1;
 		philo->thread[i].access = philo;
 		i++;
 	}
-
 }
 
 int	main(int ac, char *av[])
@@ -75,9 +73,10 @@ int	main(int ac, char *av[])
 		if (catch_int(av, philo) == 0)
 		{
 			init_thread(philo);
+			init_fork(philo);
 			main_shit(philo);
-			nihility(philo);
 		}
+		nihility(philo);
 		return (0);
 	}
 	else

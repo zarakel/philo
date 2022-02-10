@@ -6,7 +6,7 @@
 /*   By: jbuan <jbuan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/24 18:45:32 by juan              #+#    #+#             */
-/*   Updated: 2022/02/09 07:50:47 by juan             ###   ########.fr       */
+/*   Updated: 2022/02/10 17:14:42 by jbuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	death(t_philo *philo, int i)
 	printf("%ld ms	philo %d is dead\n", get_time()
 		- philo->time, philo->thread[i].number);
 	pthread_mutex_unlock(&philo->print);
-	philo->dead = 1;
 }
 
 void	ft_usleep(long time)
@@ -54,10 +53,10 @@ void	init_fork(t_philo *philo)
 	int	i;
 
 	i = 0;
-	philo->fork = malloc(sizeof(pthread_mutex_t) 
-	* philo->number_of_philosophers);
-	philo->next_fork = malloc(sizeof(pthread_mutex_t) 
-	* philo->number_of_philosophers);
+	philo->fork = malloc(sizeof(pthread_mutex_t)
+			* philo->number_of_philosophers);
+	philo->next_fork = malloc(sizeof(pthread_mutex_t *)
+			* philo->number_of_philosophers);
 	while (i < philo->number_of_philosophers)
 	{
 		pthread_mutex_init(&philo->fork[i], NULL);
@@ -67,9 +66,10 @@ void	init_fork(t_philo *philo)
 	while (i < philo->number_of_philosophers)
 	{
 		if (i == 0)
-			philo->next_fork[i] = 
-			philo->fork[philo->number_of_philosophers - 1];
+			philo->next_fork[i]
+				= &philo->fork[philo->number_of_philosophers - 1];
 		else
-			philo->next_fork[i] = philo->fork[i - 1];
+			philo->next_fork[i] = &philo->fork[i - 1];
+		i++;
 	}
 }
